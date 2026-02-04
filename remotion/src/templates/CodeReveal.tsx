@@ -1,14 +1,33 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate } from "remotion";
+import { Subtitles, SubtitleChunk, generateSubtitleChunks } from "../components/Subtitles";
 
 interface Props {
   code: string;
   componentName: string;
+  script?: string;
+  subtitlesEnabled?: boolean;
+  subtitleChunks?: SubtitleChunk[];
 }
 
-export const CodeReveal: React.FC<Props> = ({ code, componentName }) => {
+export const CodeReveal: React.FC<Props> = ({ 
+  code, 
+  componentName,
+  script,
+  subtitlesEnabled = true,
+  subtitleChunks
+}) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  // Generate subtitle chunks if script is provided but chunks aren't
+  const chunks = React.useMemo(() => {
+    if (subtitleChunks) return subtitleChunks;
+    if (script) {
+      return generateSubtitleChunks(script, fps, durationInFrames, 3);
+    }
+    return [];
+  }, [script, subtitleChunks, fps, durationInFrames]);
 
   const titleOpacity = interpolate(frame, [0, 20], [0, 1], {
     extrapolateRight: "clamp",
@@ -124,6 +143,26 @@ export const CodeReveal: React.FC<Props> = ({ code, componentName }) => {
       >
         @kinetikui
       </div>
+
+      {/* Subtitles Overlay - TOP position since code is at bottom */}
+      {subtitlesEnabled && chunks.length > 0 && (
+        <Subtitles
+          chunks={chunks}
+          style={{
+            fontFamily: "Poppins, Montserrat, Arial Black, sans-serif",
+            fontSize: 44,
+            primaryColor: "#FFFFFF",
+            highlightColor: "#61DAFB",
+            strokeColor: "#000000",
+            strokeWidth: 4,
+            position: "top",
+            bottomOffset: 120,
+            shadow: true,
+            shadowBlur: 20,
+            shadowColor: "rgba(0,0,0,0.8)",
+          }}
+        />
+      )}
     </AbsoluteFill>
   );
 };

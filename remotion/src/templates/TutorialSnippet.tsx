@@ -1,5 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, Audio, staticFile } from "remotion";
+import { Subtitles, SubtitleChunk, generateSubtitleChunks } from "../components/Subtitles";
 
 interface Step {
   text: string;
@@ -12,6 +13,9 @@ interface Props {
   voiceoverUrl?: string; // Optional voiceover audio URL
   backgroundMusicUrl?: string; // Optional background music URL
   musicVolume?: number; // Background music volume (0-1)
+  script?: string;
+  subtitlesEnabled?: boolean;
+  subtitleChunks?: SubtitleChunk[];
 }
 
 export const TutorialSnippet: React.FC<Props> = ({ 
@@ -19,9 +23,22 @@ export const TutorialSnippet: React.FC<Props> = ({
   steps, 
   voiceoverUrl,
   backgroundMusicUrl,
-  musicVolume = 0.2 
+  musicVolume = 0.2,
+  script,
+  subtitlesEnabled = true,
+  subtitleChunks
 }) => {
   const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  // Generate subtitle chunks if script is provided but chunks aren't
+  const chunks = React.useMemo(() => {
+    if (subtitleChunks) return subtitleChunks;
+    if (script) {
+      return generateSubtitleChunks(script, fps, durationInFrames, 3);
+    }
+    return [];
+  }, [script, subtitleChunks, fps, durationInFrames]);
 
   const titleOpacity = interpolate(frame, [0, 20], [0, 1], {
     extrapolateRight: "clamp",
@@ -161,6 +178,26 @@ export const TutorialSnippet: React.FC<Props> = ({
       >
         @kinetikui
       </div>
+
+      {/* Subtitles Overlay */}
+      {subtitlesEnabled && chunks.length > 0 && (
+        <Subtitles
+          chunks={chunks}
+          style={{
+            fontFamily: "Poppins, Montserrat, Arial Black, sans-serif",
+            fontSize: 52,
+            primaryColor: "#FFFFFF",
+            highlightColor: "#FFD700",
+            strokeColor: "#000000",
+            strokeWidth: 4,
+            position: "bottom",
+            bottomOffset: 140,
+            shadow: true,
+            shadowBlur: 20,
+            shadowColor: "rgba(0,0,0,0.8)",
+          }}
+        />
+      )}
     </AbsoluteFill>
   );
 };
