@@ -136,9 +136,9 @@ async function start() {
     // Initialize Instagram scheduler
     initializeScheduler();
 
-    app.listen(PORT, () => {
-      logger.info(`Backend server running on http://localhost:${PORT}`);
-      logger.info(`Videos endpoint: http://localhost:${PORT}/videos`);
+    app.listen(PORT, '0.0.0.0', () => {
+      logger.info(`Backend server running on http://0.0.0.0:${PORT}`);
+      logger.info(`Videos endpoint: http://0.0.0.0:${PORT}/videos`);
     });
   } catch (error) {
     logger.error("Failed to start server:", error);
