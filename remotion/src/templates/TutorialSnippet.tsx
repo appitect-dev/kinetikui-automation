@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, Audio, staticFile } from "remotion";
 
 interface Step {
   text: string;
@@ -9,9 +9,18 @@ interface Step {
 interface Props {
   title: string;
   steps: Step[];
+  voiceoverUrl?: string; // Optional voiceover audio URL
+  backgroundMusicUrl?: string; // Optional background music URL
+  musicVolume?: number; // Background music volume (0-1)
 }
 
-export const TutorialSnippet: React.FC<Props> = ({ title, steps }) => {
+export const TutorialSnippet: React.FC<Props> = ({ 
+  title, 
+  steps, 
+  voiceoverUrl,
+  backgroundMusicUrl,
+  musicVolume = 0.2 
+}) => {
   const frame = useCurrentFrame();
 
   const titleOpacity = interpolate(frame, [0, 20], [0, 1], {
@@ -42,6 +51,15 @@ export const TutorialSnippet: React.FC<Props> = ({ title, steps }) => {
         padding: "120px 80px",
       }}
     >
+      {/* Voiceover Audio */}
+      {voiceoverUrl && (
+        <Audio src={voiceoverUrl} volume={1.0} />
+      )}
+
+      {/* Background Music */}
+      {backgroundMusicUrl && (
+        <Audio src={backgroundMusicUrl} volume={musicVolume} />
+      )}
       {/* Title */}
       <div
         style={{

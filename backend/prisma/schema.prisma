@@ -23,6 +23,15 @@ model Video {
   postedAt      DateTime?
   instagramId   String?  // Instagram media ID after posting
   error         String?
+  
+  // Voiceover & Subtitles
+  script        String?  // Voiceover script
+  voiceoverPath String?  // Path to generated audio
+  subtitles     String?  // JSON stringified subtitle chunks
+  subtitlesEnabled Boolean @default(true)
+  subtitlesSrtPath String?  // Path to SRT file
+  subtitlesVttPath String?  // Path to VTT file
+  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

@@ -9,6 +9,10 @@ RENDER_CONCURRENCY=3
 LOG_LEVEL=info
 NODE_ENV=production
 
+# AI Voiceover (ElevenLabs)
+# Get your API key from: https://elevenlabs.io/app/settings/api-keys
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+
 # Instagram API (get from Meta Developer Portal)
 # Set these via the dashboard /settings page, or directly in database
 

@@ -1,12 +1,21 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Audio } from "remotion";
 
 interface Props {
   problem: string;
   solution: string;
+  voiceoverUrl?: string;
+  backgroundMusicUrl?: string;
+  musicVolume?: number;
 }
 
-export const ProblemSolution: React.FC<Props> = ({ problem, solution }) => {
+export const ProblemSolution: React.FC<Props> = ({ 
+  problem, 
+  solution,
+  voiceoverUrl,
+  backgroundMusicUrl,
+  musicVolume = 0.2
+}) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
 
@@ -32,6 +41,9 @@ export const ProblemSolution: React.FC<Props> = ({ problem, solution }) => {
         overflow: "hidden",
       }}
     >
+      {voiceoverUrl && <Audio src={voiceoverUrl} volume={1.0} />}
+      {backgroundMusicUrl && <Audio src={backgroundMusicUrl} volume={musicVolume} />}
+
       {/* Problem section */}
       <div
         style={{

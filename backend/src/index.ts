@@ -2,14 +2,17 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { initializeScheduler } from "./instagram/scheduler";
 import { initializeWorkers, addVideoToQueue, getQueueStats } from "./render/queue";
+import { VoiceService } from "./render/voice";
 import { logger } from "./utils/logger";
 import dotenv from "dotenv";
 import path from "path";
+import subtitleRoutes from "./subtitles/routes";
 
 dotenv.config();
 
 const app = express();
 const prisma = new PrismaClient();
+const voiceService = new VoiceService();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -28,6 +31,10 @@ app.use((req, res, next) => {
 // Serve rendered videos publicly (for Instagram upload)
 app.use("/videos", express.static(path.join(__dirname, "../../videos")));
 app.use("/thumbnails", express.static(path.join(__dirname, "../../thumbnails")));
+app.use("/subtitles", express.static(path.join(__dirname, "../../subtitles")));
+
+// API routes
+app.use("/api/subtitles", subtitleRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -103,6 +110,21 @@ app.get("/api/videos/:id", async (req, res) => {
   }
 });
 
+// Update video by ID
+app.patch("/api/videos/:id", async (req, res) => {
+  try {
+    const video = await prisma.video.update({
+      where: { id: req.params.id },
+      data: req.body,
+    });
+
+    res.json(video);
+  } catch (error: any) {
+    logger.error("Failed to update video:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Update settings
 app.post("/api/settings", async (req, res) => {
   try {
@@ -136,6 +158,78 @@ app.get("/api/settings", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// ============================================
+// Voice API Endpoints
+// ============================================
+
+// Get available voice presets
+app.get("/api/voice/presets", (req, res) => {
+  try {
+    const presets = voiceService.getPresets();
+    res.json(presets);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Generate voiceover audio from script
+app.post("/api/voice/generate", async (req, res) => {
+  try {
+    const { text, voicePresetId, speakingRate, pitch, stability, similarityBoost } = req.body;
+
+    if (!text) {
+      return res.status(400).json({ error: "Text is required" });
+    }
+
+    if (!voicePresetId) {
+      return res.status(400).json({ error: "Voice preset ID is required" });
+    }
+
+    const result = await voiceService.generate({
+      text,
+      voicePresetId,
+      speakingRate,
+      pitch,
+      stability,
+      similarityBoost,
+    });
+
+    // Return relative path for frontend
+    const relativePath = path.relative(
+      path.join(__dirname, "../../"),
+      result.audioPath
+    );
+
+    res.json({
+      ...result,
+      audioUrl: `/audio/${path.basename(result.audioPath)}`,
+      relativePath,
+    });
+  } catch (error: any) {
+    logger.error("Voice generation failed:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Auto-generate script from template props
+app.post("/api/voice/generate-script", (req, res) => {
+  try {
+    const { compositionId, props } = req.body;
+
+    if (!compositionId || !props) {
+      return res.status(400).json({ error: "compositionId and props are required" });
+    }
+
+    const script = voiceService.generateScript(compositionId, props);
+    res.json({ script });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Serve audio files
+app.use("/audio", express.static(path.join(__dirname, "../../audio")));
 
 // Start server
 async function start() {

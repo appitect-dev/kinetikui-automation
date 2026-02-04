@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Audio } from "remotion";
 
 interface Stat {
   label: string;
@@ -9,9 +9,18 @@ interface Stat {
 interface Props {
   stats: Stat[];
   testimonial: string;
+  voiceoverUrl?: string;
+  backgroundMusicUrl?: string;
+  musicVolume?: number;
 }
 
-export const SocialProof: React.FC<Props> = ({ stats, testimonial }) => {
+export const SocialProof: React.FC<Props> = ({ 
+  stats, 
+  testimonial,
+  voiceoverUrl,
+  backgroundMusicUrl,
+  musicVolume = 0.2
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -31,6 +40,9 @@ export const SocialProof: React.FC<Props> = ({ stats, testimonial }) => {
         padding: "100px 80px",
       }}
     >
+      {voiceoverUrl && <Audio src={voiceoverUrl} volume={1.0} />}
+      {backgroundMusicUrl && <Audio src={backgroundMusicUrl} volume={musicVolume} />}
+
       {/* Title */}
       <div
         style={{

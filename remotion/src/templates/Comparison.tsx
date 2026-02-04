@@ -1,14 +1,25 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Audio } from "remotion";
 
 interface Props {
   leftTitle: string;
   rightTitle: string;
   leftPoints: string[];
   rightPoints: string[];
+  voiceoverUrl?: string;
+  backgroundMusicUrl?: string;
+  musicVolume?: number;
 }
 
-export const Comparison: React.FC<Props> = ({ leftTitle, rightTitle, leftPoints, rightPoints }) => {
+export const Comparison: React.FC<Props> = ({ 
+  leftTitle, 
+  rightTitle, 
+  leftPoints, 
+  rightPoints,
+  voiceoverUrl,
+  backgroundMusicUrl,
+  musicVolume = 0.2
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -25,6 +36,9 @@ export const Comparison: React.FC<Props> = ({ leftTitle, rightTitle, leftPoints,
         padding: "100px 0",
       }}
     >
+      {voiceoverUrl && <Audio src={voiceoverUrl} volume={1.0} />}
+      {backgroundMusicUrl && <Audio src={backgroundMusicUrl} volume={musicVolume} />}
+
       {/* VS text in center */}
       <div
         style={{

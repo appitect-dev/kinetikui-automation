@@ -1,27 +1,37 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Audio } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import { Subtitles, SubtitleChunk, generateSubtitleChunks } from "../components/Subtitles";
 
 interface Props {
   componentName: string;
   features: string[];
-  voiceoverUrl?: string;
-  backgroundMusicUrl?: string;
-  musicVolume?: number;
+  script?: string;
+  subtitlesEnabled?: boolean;
+  subtitleChunks?: SubtitleChunk[];
 }
 
 export const FeatureHighlight: React.FC<Props> = ({ 
   componentName, 
   features,
-  voiceoverUrl,
-  backgroundMusicUrl,
-  musicVolume = 0.2
+  script,
+  subtitlesEnabled = true,
+  subtitleChunks
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
 
   const titleOpacity = interpolate(frame, [0, 20], [0, 1], {
     extrapolateRight: "clamp",
   });
+
+  // Generate subtitle chunks if script is provided but chunks aren't
+  const chunks = React.useMemo(() => {
+    if (subtitleChunks) return subtitleChunks;
+    if (script) {
+      return generateSubtitleChunks(script, fps, durationInFrames, 3);
+    }
+    return [];
+  }, [script, subtitleChunks, fps, durationInFrames]);
 
   return (
     <AbsoluteFill
@@ -35,8 +45,6 @@ export const FeatureHighlight: React.FC<Props> = ({
         padding: "100px 80px",
       }}
     >
-      {voiceoverUrl && <Audio src={voiceoverUrl} volume={1.0} />}
-      {backgroundMusicUrl && <Audio src={backgroundMusicUrl} volume={musicVolume} />}
       {/* Component name */}
       <div
         style={{
@@ -155,6 +163,26 @@ export const FeatureHighlight: React.FC<Props> = ({
       >
         @kinetikui
       </div>
+
+      {/* Subtitles Overlay */}
+      {subtitlesEnabled && chunks.length > 0 && (
+        <Subtitles
+          chunks={chunks}
+          style={{
+            fontFamily: "Poppins, Montserrat, Arial Black, sans-serif",
+            fontSize: 52,
+            primaryColor: "#FFFFFF",
+            highlightColor: "#FFD700",
+            strokeColor: "#000000",
+            strokeWidth: 4,
+            position: "bottom",
+            bottomOffset: 140,
+            shadow: true,
+            shadowBlur: 20,
+            shadowColor: "rgba(0,0,0,0.8)",
+          }}
+        />
+      )}
     </AbsoluteFill>
   );
 };
