@@ -6,12 +6,15 @@ interface Props {
   tags?: string[]
 }
 
-// Professional easing curves
+// Professional easing curves (using Remotion's Easing API)
 const EASING = {
-  easeOutExpo: Easing.bezier(0.16, 1, 0.3, 1),
-  easeOutBack: Easing.bezier(0.34, 1.56, 0.64, 1),
-  easeInOutCubic: Easing.bezier(0.65, 0, 0.35, 1),
-  anticipate: Easing.bezier(0.68, -0.55, 0.265, 1.55),
+  easeOutExpo: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+  easeOutBack: Easing.out(Easing.back(1.5)),
+  easeInOutCubic: Easing.inOut(Easing.cubic),
+  anticipate: (t: number) => {
+    const c = 1.70158
+    return t * t * ((c + 1) * t - c)
+  },
 }
 
 // Floating particles background
