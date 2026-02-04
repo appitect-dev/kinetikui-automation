@@ -66,7 +66,7 @@ function AnimatedButton({ frame, videoConfig }: { frame: number; videoConfig: { 
     frame,
     [startFrame, startFrame + 25],
     [60, 0],
-    { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+    { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
   )
   
   const entranceOpacity = interpolate(
@@ -81,7 +81,7 @@ function AnimatedButton({ frame, videoConfig }: { frame: number; videoConfig: { 
     frame,
     [100, 110, 125, 135, 150, 160],
     [1, 1.08, 1, 1.08, 1, 1.05],
-    { extrapolateRight: 'clamp', easing: EASING.easeInOutCubic }
+    { extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) }
   )
   
   // Click animation
@@ -180,7 +180,7 @@ function AnimatedCard({ frame, videoConfig }: { frame: number; videoConfig: { fp
     frame,
     [startFrame, startFrame + 35],
     [8, 0],
-    { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+    { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
   )
   
   // Floating animation
@@ -275,28 +275,28 @@ function KineticText({
           frame,
           [charDelay, charDelay + 8],
           [0, 1],
-          { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+          { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
         )
         
         const blur = interpolate(
           frame,
           [charDelay, charDelay + 12],
           [8, 0],
-          { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+          { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
         )
         
         const y = interpolate(
           frame,
           [charDelay, charDelay + 15],
           [20, 0],
-          { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+          { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
         )
         
         const scale = interpolate(
           frame,
           [charDelay, charDelay + 10],
           [0.8, 1],
-          { extrapolateRight: 'clamp', easing: EASING.easeOutBack }
+          { extrapolateRight: 'clamp', easing: Easing.out(Easing.back(1.5)) }
         )
         
         return (
@@ -338,7 +338,7 @@ export const ComponentShowcase: React.FC<Props> = ({
     frame,
     [0, 30],
     [90, 0],
-    { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+    { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
   )
 
   // Badge entrance
@@ -352,7 +352,7 @@ export const ComponentShowcase: React.FC<Props> = ({
     frame,
     [8, 35],
     [100, 0],
-    { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+    { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
   )
 
   // Description fade
@@ -367,7 +367,7 @@ export const ComponentShowcase: React.FC<Props> = ({
     frame, 
     [45, 65], 
     [15, 0], 
-    { extrapolateRight: 'clamp', easing: EASING.easeOutExpo }
+    { extrapolateRight: 'clamp', easing: Easing.out(Easing.exp) }
   )
 
   // Tags stagger
