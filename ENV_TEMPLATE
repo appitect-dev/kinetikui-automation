@@ -1,0 +1,19 @@
+# Backend Environment Variables
+# Copy to backend/.env
+
+PORT=3000
+PUBLIC_VIDEO_URL=http://46.62.209.17:3000/videos
+REDIS_HOST=localhost
+REDIS_PORT=6379
+RENDER_CONCURRENCY=3
+LOG_LEVEL=info
+NODE_ENV=production
+
+# Instagram API (get from Meta Developer Portal)
+# Set these via the dashboard /settings page, or directly in database
+
+# Dashboard Environment Variables  
+# Copy to dashboard/.env.local
+
+BACKEND_URL=http://localhost:3000
+# For production (Vercel): BACKEND_URL=http://46.62.209.17:3000

@@ -1,0 +1,56 @@
+// Prisma schema for video scheduling and tracking
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Video {
+  id            String   @id @default(uuid())
+  compositionId String   // Remotion composition ID
+  title         String
+  caption       String?
+  hashtags      String?  // Comma-separated
+  props         String   // JSON stringified props
+  status        String   @default("pending") // pending, rendering, rendered, scheduled, posted, failed
+  filePath      String?  // Path to rendered video
+  thumbnailPath String?
+  scheduledFor  DateTime?
+  postedAt      DateTime?
+  instagramId   String?  // Instagram media ID after posting
+  error         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+model PostMetrics {
+  id          String   @id @default(uuid())
+  videoId     String
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  comments    Int      @default(0)
+  saves       Int      @default(0)
+  shares      Int      @default(0)
+  reach       Int      @default(0)
+  engagement  Float    @default(0.0)
+  fetchedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([videoId])
+}
+
+model Settings {
+  id                    String   @id @default("default")
+  instagramAccessToken  String?
+  instagramAccountId    String?
+  postingTimes          String   @default("09:00,14:00,19:00") // CET times
+  enabled               Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
+}
