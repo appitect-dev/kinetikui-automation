@@ -66,7 +66,7 @@ export default function VideosPage() {
                 {video.status === 'rendered' && video.filePath && (
                   <div className="relative bg-black aspect-video">
                     <video
-                      src={`http://46.62.209.17:5000${video.filePath.replace('/home/deploy/kinetikui-automation', '')}`}
+                      src={`/api/video/${video.id}`}
                       controls
                       className="w-full h-full"
                       preload="metadata"
@@ -133,8 +133,8 @@ export default function VideosPage() {
                     {video.status === 'rendered' && video.filePath && (
                       <>
                         <a
-                          href={`http://46.62.209.17:5000${video.filePath.replace('/home/deploy/kinetikui-automation', '')}`}
-                          download
+                          href={`/api/video/${video.id}`}
+                          download={`${video.title.replace(/[^a-z0-9]/gi, '_')}.mp4`}
                           className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                         >
                           <Download className="w-4 h-4" />
