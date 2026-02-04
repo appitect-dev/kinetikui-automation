@@ -6,7 +6,7 @@ import axios from 'axios'
 import { ArrowLeft, Video } from 'lucide-react'
 import Link from 'next/link'
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
 const TEMPLATES = [
   { id: 'ComponentShowcase', name: 'Component Showcase', description: 'Scrolling grid of animated components' },

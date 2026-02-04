@@ -6,7 +6,7 @@ import axios from 'axios'
 import { ArrowLeft, Save } from 'lucide-react'
 import Link from 'next/link'
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
 export default function SettingsPage() {
   const queryClient = useQueryClient()

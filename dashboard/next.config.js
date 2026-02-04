@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3000',
-  },
+  // NEXT_PUBLIC_* env variables are automatically exposed to the browser
 }
 
 module.exports = nextConfig
