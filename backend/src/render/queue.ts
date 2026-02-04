@@ -74,7 +74,7 @@ export function initializeWorkers(concurrency: number = 3): void {
     logger.error(`Render job ${job?.id} failed:`, err);
   });
 
-  worker.on("progress", (job: Job, progress: number | object) => {
+  worker.on("progress", (job: Job, progress: any) => {
     logger.info(`Render job ${job.id} progress: ${JSON.stringify(progress)}`);
   });
 
