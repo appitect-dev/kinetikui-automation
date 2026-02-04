@@ -32,7 +32,7 @@ export default function PreviewPage() {
 
   const createVideo = useMutation({
     mutationFn: async (data: any) => {
-      const res = await axios.post(`${BACKEND_URL}/api/videos`, data)
+      const res = await axios.post(`${BACKEND_URL}/videos`, data)
       return res.data
     },
     onSuccess: () => {

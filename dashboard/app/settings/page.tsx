@@ -15,7 +15,7 @@ export default function SettingsPage() {
   const { data: settings, isLoading } = useQuery({
     queryKey: ['settings'],
     queryFn: async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/settings`)
+      const res = await axios.get(`${BACKEND_URL}/settings`)
       return res.data
     },
   })
@@ -37,7 +37,7 @@ export default function SettingsPage() {
 
   const updateSettings = useMutation({
     mutationFn: async (data: any) => {
-      const res = await axios.post(`${BACKEND_URL}/api/settings`, data)
+      const res = await axios.post(`${BACKEND_URL}/settings`, data)
       return res.data
     },
     onSuccess: () => {

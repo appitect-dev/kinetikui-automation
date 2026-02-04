@@ -12,7 +12,7 @@ export default function Home() {
   const { data: videos } = useQuery({
     queryKey: ['videos'],
     queryFn: async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/videos?limit=10`)
+      const res = await axios.get(`${BACKEND_URL}/videos?limit=10`)
       return res.data
     },
   })
@@ -20,7 +20,7 @@ export default function Home() {
   const { data: queueStats } = useQuery({
     queryKey: ['queue-stats'],
     queryFn: async () => {
-      const res = await axios.get(`${BACKEND_URL}/api/queue/stats`)
+      const res = await axios.get(`${BACKEND_URL}/queue/stats`)
       return res.data
     },
     refetchInterval: 5000,
