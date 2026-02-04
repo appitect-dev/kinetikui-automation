@@ -111,7 +111,12 @@ export default function Home() {
 
         {/* Recent Videos */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Recent Videos</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recent Videos</h2>
+            <Link href="/videos" className="text-purple-600 hover:text-purple-700 dark:text-purple-400 font-medium">
+              View All →
+            </Link>
+          </div>
           
           {videos && videos.length > 0 ? (
             <div className="space-y-4">
