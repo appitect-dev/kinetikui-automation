@@ -5,7 +5,8 @@ import axios from 'axios'
 import Link from 'next/link'
 import { Calendar, Video, Settings, TrendingUp } from 'lucide-react'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+// Use Vercel API proxy to avoid mixed-content issues (HTTPS → HTTP)
+const BACKEND_URL = '/api/proxy'
 
 export default function Home() {
   const { data: videos } = useQuery({

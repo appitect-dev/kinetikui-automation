@@ -6,7 +6,8 @@ import axios from 'axios'
 import { ArrowLeft, Video } from 'lucide-react'
 import Link from 'next/link'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+// Use Vercel API proxy to avoid mixed-content issues (HTTPS → HTTP)
+const BACKEND_URL = '/api/proxy'
 
 const TEMPLATES = [
   { id: 'ComponentShowcase', name: 'Component Showcase', description: 'Scrolling grid of animated components' },
