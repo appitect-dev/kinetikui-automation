@@ -135,7 +135,8 @@ export class ScriptGenerator {
     const template = req.template;
 
     // Select random hook
-    const hookTemplate = this.randomChoice(HOOKS[template] || HOOKS.DidYouKnow);
+    const hookTemplates = HOOKS[template as keyof typeof HOOKS] || HOOKS.DidYouKnow;
+    const hookTemplate = this.randomChoice(hookTemplates);
     const hook = this.fillTemplate(hookTemplate, {
       time: this.randomChoice(STATS.time_saved),
       task: "repetitive UI work",
@@ -152,11 +153,13 @@ export class ScriptGenerator {
     });
 
     // Select problem
-    const problemList = PROBLEMS[topic] || PROBLEMS.dx;
+    const problemTopic = topic === 'general' ? 'dx' : topic;
+    const problemList = PROBLEMS[problemTopic as keyof typeof PROBLEMS];
     const problem = this.randomChoice(problemList);
 
     // Select solution
-    const solutionList = SOLUTIONS[topic] || SOLUTIONS.dx;
+    const solutionTopic = topic === 'general' ? 'dx' : topic;
+    const solutionList = SOLUTIONS[solutionTopic as keyof typeof SOLUTIONS];
     const solution = this.randomChoice(solutionList);
 
     // Select CTA
@@ -236,10 +239,10 @@ export class ScriptGenerator {
     for (const sentence of sentences) {
       // Further split long sentences on commas and "and"
       const parts = sentence.split(/(?<=,|\band\b)\s+/);
-      chunks.push(...parts);
+      chunks.push(...parts.filter(p => p));
     }
     
-    return chunks.filter(chunk => chunk.trim().length > 0);
+    return chunks.filter(chunk => chunk && chunk.trim().length > 0);
   }
 }
 
