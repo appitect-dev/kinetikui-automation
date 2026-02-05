@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import Link from 'next/link'
-import { Calendar, Video, Settings, TrendingUp } from 'lucide-react'
+import { Calendar, Video, Settings, TrendingUp, Sparkles } from 'lucide-react'
 
 // Use Vercel API proxy to avoid mixed-content issues (HTTPS → HTTP)
 const BACKEND_URL = '/api/proxy'
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <Link href="/preview">
             <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl shadow-lg p-8 text-white hover:shadow-2xl transition-shadow cursor-pointer">
               <Video className="w-12 h-12 mb-4" />
@@ -105,6 +105,14 @@ export default function Home() {
               <TrendingUp className="w-12 h-12 mb-4" />
               <h2 className="text-2xl font-bold mb-2">Analytics</h2>
               <p className="text-green-100">Track performance metrics</p>
+            </div>
+          </Link>
+
+          <Link href="/marketing">
+            <div className="bg-gradient-to-r from-pink-500 to-rose-600 rounded-xl shadow-lg p-8 text-white hover:shadow-2xl transition-shadow cursor-pointer">
+              <Sparkles className="w-12 h-12 mb-4" />
+              <h2 className="text-2xl font-bold mb-2">Viral Marketing</h2>
+              <p className="text-pink-100">AI-powered viral content</p>
             </div>
           </Link>
         </div>
