@@ -7,6 +7,7 @@ import { logger } from "./utils/logger";
 import dotenv from "dotenv";
 import path from "path";
 import subtitleRoutes from "./subtitles/routes";
+import marketingRoutes from "./marketing/routes";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/subtitles", express.static(path.join(__dirname, "../../subtitles")));
 
 // API routes
 app.use("/api/subtitles", subtitleRoutes);
+app.use("/api/marketing", marketingRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
